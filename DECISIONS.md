@@ -19,3 +19,7 @@
 - Product page shows "Total with standard delivery" in the buy box: the full price before checkout (improvement over Amazon).
 - Recently viewed stored in an httpOnly cookie (last 10 ids) written by a server action after render; works for guests.
 - Unknown product slugs render a friendly not-found page; the HTTP status stays 200 because the page streams (Next 16 soft 404).
+- Guest cart: httpOnly `guestCartId` cookie created on first add (server action); merged into the user's cart inside a transaction at sign-in, quantities summed and capped by stock and 10.
+- Two-step sign-in (email, then password) like Amazon; "Try the demo account" signs in as the seeded user in one click, password read from env on the server only.
+- Cart quantity changes use `useOptimistic`, so the select updates instantly while the server action runs.
+- Out-of-stock or over-stock cart lines disable "Proceed to checkout" with a plain-language message.

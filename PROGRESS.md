@@ -24,9 +24,9 @@ Production URL: _pending_
 - [x] Product page
 
 ## Phase 4: Cart and auth
-- [ ] Guest cart + cookie
-- [ ] Register, two-step sign-in, demo account, sign out
-- [ ] Cart merge on sign-in
+- [x] Guest cart + cookie
+- [x] Register, two-step sign-in, demo account, sign out
+- [x] Cart merge on sign-in (Playwright verified)
 
 ## Phase 5: Checkout and orders
 - [ ] Checkout (address, payment, review, place order transaction)
