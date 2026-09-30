@@ -42,4 +42,8 @@ npm run dev
 
 Tests: `npm run test:e2e` runs locally. Set `BASE_URL=https://kartly-amazon-clone.vercel.app` to run them against the live site.
 
+## Built with AI
+
+Built with Claude Code. The full record of prompts, responses and commands is in [`.agent-logs/`](.agent-logs/). It is captured automatically by a Claude Code hook (`.claude/hooks/capture.mjs`), which redacts connection strings, tokens, passwords and personal emails.
+
 Product data comes from DummyJSON. Homepage photos are CC0 images from StockSnap; credits are in `public/hero/CREDITS.json` and `public/cards/CREDITS.json`. Design decisions are logged in `DECISIONS.md`.

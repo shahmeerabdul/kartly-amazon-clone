@@ -50,7 +50,5 @@ next-env.d.ts
 /test-results/
 /playwright-report/
 
-# agent capture logs (kept local only)
-/.agent-logs/
 
 .vercel
