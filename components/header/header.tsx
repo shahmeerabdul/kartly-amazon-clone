@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { getCategories } from "@/lib/data/catalog";
 import { getCartCount } from "@/lib/data/cart";
 import { getLocation } from "@/lib/data/prefs";
+import { db } from "@/lib/db";
 import { SearchBar } from "@/components/header/search-bar";
 import { DeliverTo } from "@/components/header/deliver-to";
 import { AccountMenu } from "@/components/header/account-menu";
@@ -53,6 +54,14 @@ function CartIcon({ count }: { count: number }) {
 export async function Header() {
   const [session, categories, count, location] = await Promise.all([auth(), getCategories(), getCartCount(), getLocation()]);
   const name = session?.user?.name ?? null;
+  const addresses = session?.user?.id
+    ? await db.address.findMany({
+        where: { userId: session.user.id },
+        orderBy: [{ isDefault: "desc" }, { id: "asc" }],
+        take: 5,
+        select: { id: true, fullName: true, line1: true, city: true, state: true, zip: true, isDefault: true },
+      })
+    : [];
   const depts = categories.map((c) => ({ slug: c.slug, name: c.name }));
 
   return (
@@ -63,7 +72,7 @@ export async function Header() {
       <div className="bg-header">
         <div className="flex flex-wrap items-center gap-x-1 px-2 py-1 md:h-[60px] md:flex-nowrap md:py-0">
           <Wordmark />
-          <DeliverTo location={location} name={name} />
+          <DeliverTo location={location} name={name} addresses={addresses} />
           <div className="order-last w-full pb-2 md:order-none md:mx-2 md:w-auto md:flex-1 md:pb-0">
             <Suspense fallback={<div className="h-10 w-full rounded-md bg-white" />}>
               <SearchBar categories={depts} />
@@ -94,7 +103,7 @@ export async function Header() {
           </div>
         </div>
       </div>
-      <DeliverTo location={location} name={name} compact />
+      <DeliverTo location={location} name={name} addresses={addresses} compact />
       <nav aria-label="Shortcuts" className="bg-subnav">
         <div className="flex h-[39px] items-center overflow-x-auto whitespace-nowrap px-2 text-sm">
           <AllDrawer departments={depts} name={name} email={session?.user?.email ?? null} />
