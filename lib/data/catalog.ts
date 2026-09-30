@@ -14,8 +14,15 @@ export const productCardSelect = {
   brand: true,
 } as const;
 
+// Departments in drawer order (featured first), each with its subcategories.
 export const getCategories = cache(() =>
-  db.category.findMany({ orderBy: { name: "asc" }, include: { _count: { select: { products: true } } } }),
+  db.category.findMany({
+    orderBy: { sortOrder: "asc" },
+    include: {
+      _count: { select: { products: true } },
+      subcategories: { orderBy: { sortOrder: "asc" }, select: { slug: true, name: true, _count: { select: { products: true } } } },
+    },
+  }),
 );
 
 export async function getTodaysDeals(take = 12) {
@@ -29,9 +36,9 @@ export async function getTodaysDeals(take = 12) {
   return rows.map((r) => products.find((p) => p.id === r.id)!).filter(Boolean);
 }
 
-export const getTopRated = (categorySlug: string, take = 12) =>
+export const getTopRated = (categorySlug: string, take = 12, subSlug?: string) =>
   db.product.findMany({
-    where: { category: { slug: categorySlug } },
+    where: { category: { slug: categorySlug }, ...(subSlug ? { subcategory: { slug: subSlug } } : {}) },
     orderBy: [{ rating: "desc" }, { ratingCount: "desc" }],
     take,
     select: productCardSelect,

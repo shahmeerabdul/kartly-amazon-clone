@@ -38,11 +38,25 @@ model Address {
 }
 
 model Category {
-  id       String    @id @default(cuid())
-  slug     String    @unique
-  name     String
-  imageUrl String
-  products Product[]
+  id            String        @id @default(cuid())
+  slug          String        @unique
+  name          String
+  imageUrl      String
+  sortOrder     Int           @default(0)
+  products      Product[]
+  subcategories Subcategory[]
+}
+
+model Subcategory {
+  id         String    @id @default(cuid())
+  slug       String    @unique
+  name       String
+  sortOrder  Int       @default(0)
+  categoryId String
+  category   Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  products   Product[]
+
+  @@index([categoryId])
 }
 
 model Product {
@@ -63,6 +77,8 @@ model Product {
   tags           String[]
   categoryId     String
   category       Category       @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  subcategoryId  String?
+  subcategory    Subcategory?   @relation(fields: [subcategoryId], references: [id], onDelete: SetNull)
   createdAt      DateTime       @default(now())
   reviews        Review[]
   cartItems      CartItem[]
@@ -70,6 +86,7 @@ model Product {
   wishlistItems  WishlistItem[]
 
   @@index([categoryId])
+  @@index([subcategoryId])
 }
 
 model Review {

@@ -5,13 +5,13 @@ import { TileScroller } from "@/components/home/tile-scroller";
 // Amazon-style tall promo tiles. Photos are CC0 lifestyle shots from StockSnap
 // (credits in public/hero/CREDITS.json), stored locally and optimized by next/image.
 const TILES: { img: string; href: string; title: string; alt: string; dark?: boolean }[] = [
-  { img: "kitchen", href: "/s?cat=kitchen", title: "Shop kitchen must-haves", alt: "A steel kettle on a gas stove" },
+  { img: "kitchen", href: "/s?cat=home-kitchen&sub=kitchen", title: "Shop kitchen must-haves", alt: "A steel kettle on a gas stove" },
   { img: "beauty", href: "/s?cat=beauty", title: "Shop all things beauty", alt: "Makeup brushes, pink roses and a mirror on a vanity" },
   { img: "fashion", href: "/s?cat=womens-fashion", title: "Start looking sharp", alt: "A rack of shirts and jackets in a boutique" },
-  { img: "home", href: "/s?cat=home", title: "Refresh every room", alt: "White sofas with plaid cushions in a bright living room" },
-  { img: "phone", href: "/s?cat=cell-phones", title: "Upgrade your phone", alt: "A smiling woman holding a smartphone" },
-  { img: "shoes", dark: true, href: "/s?cat=mens-fashion", title: "Fresh kicks for every day", alt: "Navy canvas sneakers with white laces" },
-  { img: "laptop", dark: true, href: "/s?cat=computers", title: "Laptops for work & play", alt: "A laptop and a cup of coffee on a wooden desk" },
+  { img: "home", href: "/s?cat=home-kitchen", title: "Refresh every room", alt: "White sofas with plaid cushions in a bright living room" },
+  { img: "phone", href: "/s?cat=electronics&sub=cell-phones", title: "Upgrade your phone", alt: "A smiling woman holding a smartphone" },
+  { img: "shoes", dark: true, href: "/s?cat=mens-fashion&sub=mens-shoes", title: "Fresh kicks for every day", alt: "Navy canvas sneakers with white laces" },
+  { img: "laptop", dark: true, href: "/s?cat=computers&sub=laptops", title: "Laptops for work & play", alt: "A laptop and a cup of coffee on a wooden desk" },
   { img: "sports", dark: true, href: "/s?cat=sports", title: "Game on: sports gear", alt: "A tennis ball and racket on a clay court" },
 ];
 

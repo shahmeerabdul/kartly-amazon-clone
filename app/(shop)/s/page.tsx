@@ -6,14 +6,15 @@ import { AddToCartButton } from "@/components/cart/add-to-cart-button";
 import { SortSelect } from "@/components/search/sort-select";
 import { FilterSheet } from "@/components/search/filter-sheet";
 import { Stars } from "@/components/ui/stars";
-import { PAGE_SIZE, parseSearchParams, searchHref, searchProducts, type SearchParams } from "@/lib/data/search";
+import { PAGE_SIZE, parseSearchParams, resolveSearchParams, searchHref, searchProducts, type SearchParams } from "@/lib/data/search";
 import { getCategories } from "@/lib/data/catalog";
 import { cn } from "@/lib/format";
 
 export async function generateMetadata({ searchParams }: PageProps<"/s">): Promise<Metadata> {
-  const p = parseSearchParams(await searchParams);
+  const p = await resolveSearchParams(parseSearchParams(await searchParams));
   const cats = await getCategories();
-  const dept = cats.find((c) => c.slug === p.cat)?.name;
+  const deptCat = cats.find((c) => c.slug === p.cat);
+  const dept = deptCat?.subcategories.find((x) => x.slug === p.sub)?.name ?? deptCat?.name;
   const title = p.k ? `Results for "${p.k}"` : dept ?? "All products";
   return { title, description: `Shop ${dept ?? "Kartly"}${p.k ? ` for ${p.k}` : ""}: compare prices, ratings and delivery dates.` };
 }
@@ -44,13 +45,34 @@ function Sidebar({ p, data }: { p: SearchParams; data: Awaited<ReturnType<typeof
             <Link href={searchHref(p, { cat: undefined })} className="text-text hover:text-link-hover">‹ Any Department</Link>
           </li>
         )}
-        {data.departments.map((d) => (
-          <li key={d.slug}>
-            <Link href={searchHref(p, { cat: d.slug })} className={cn("hover:text-link-hover", p.cat === d.slug ? "font-bold" : "")} aria-current={p.cat === d.slug ? "true" : undefined}>
-              {d.name} <span className="text-text-secondary">({d.count})</span>
-            </Link>
-          </li>
-        ))}
+        {data.departments
+          .filter((d) => !p.cat || d.slug === p.cat)
+          .map((d) => (
+            <li key={d.slug}>
+              <Link
+                href={searchHref(p, { cat: d.slug })}
+                className={cn("hover:text-link-hover", p.cat === d.slug && !p.sub ? "font-bold" : "")}
+                aria-current={p.cat === d.slug && !p.sub ? "true" : undefined}
+              >
+                {d.name} {!p.cat && <span className="text-text-secondary">({d.count})</span>}
+              </Link>
+              {p.cat === d.slug && data.subcategories.length > 0 && (
+                <ul className="mt-1 space-y-1 pl-3">
+                  {data.subcategories.map((sc) => (
+                    <li key={sc.slug}>
+                      <Link
+                        href={searchHref(p, { sub: p.sub === sc.slug ? undefined : sc.slug })}
+                        className={cn("hover:text-link-hover", p.sub === sc.slug && "font-bold")}
+                        aria-current={p.sub === sc.slug ? "true" : undefined}
+                      >
+                        {sc.name} <span className="text-text-secondary">({sc.count})</span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </li>
+          ))}
       </Facet>
       <Facet title="Customer Reviews">
         {[4, 3, 2, 1].map((r) => (
@@ -121,12 +143,15 @@ function Sidebar({ p, data }: { p: SearchParams; data: Awaited<ReturnType<typeof
 }
 
 export default async function SearchPage({ searchParams }: PageProps<"/s">) {
-  const p = parseSearchParams(await searchParams);
+  const p = await resolveSearchParams(parseSearchParams(await searchParams));
   const [data, cats] = await Promise.all([searchProducts(p), getCategories()]);
-  const deptName = cats.find((c) => c.slug === p.cat)?.name;
+  const deptCat = cats.find((c) => c.slug === p.cat);
+  const subName = deptCat?.subcategories.find((x) => x.slug === p.sub)?.name;
+  const deptName = deptCat?.name;
 
   const chips: { label: string; href: string }[] = [];
   if (p.cat && deptName) chips.push({ label: deptName, href: searchHref(p, { cat: undefined }) });
+  if (p.sub && subName) chips.push({ label: subName, href: searchHref(p, { sub: undefined }) });
   if (p.rating) chips.push({ label: `${p.rating}★ & up`, href: searchHref(p, { rating: undefined }) });
   if (p.min !== undefined || p.max !== undefined)
     chips.push({
@@ -138,7 +163,7 @@ export default async function SearchPage({ searchParams }: PageProps<"/s">) {
 
   const from = data.total ? (data.page - 1) * PAGE_SIZE + 1 : 0;
   const to = Math.min(data.page * PAGE_SIZE, data.total);
-  const clearAll = searchHref({ ...p, cat: undefined, min: undefined, max: undefined, rating: undefined, brands: [], stock: false });
+  const clearAll = searchHref({ ...p, cat: undefined, sub: undefined, min: undefined, max: undefined, rating: undefined, brands: [], stock: false });
 
   return (
     <div className="mx-auto w-full max-w-[1500px]">
@@ -152,7 +177,7 @@ export default async function SearchPage({ searchParams }: PageProps<"/s">) {
           )}
           {!p.k && deptName && (
             <>
-              {" "}in <b>{deptName}</b>
+              {" "}in <b>{subName ? `${deptName} › ${subName}` : deptName}</b>
             </>
           )}
         </p>

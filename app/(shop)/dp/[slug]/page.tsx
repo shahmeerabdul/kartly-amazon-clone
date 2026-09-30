@@ -60,10 +60,10 @@ export default async function ProductPage({ params, searchParams }: PageProps<"/
           <li><Link href="/" className="hover:text-link-hover hover:underline">Home</Link></li>
           <li aria-hidden>›</li>
           <li><Link href={`/s?cat=${product.category.slug}`} className="hover:text-link-hover hover:underline">{product.category.name}</Link></li>
-          {product.brand && (
+          {product.subcategory && (
             <>
               <li aria-hidden>›</li>
-              <li><Link href={`/s?cat=${product.category.slug}&brand=${encodeURIComponent(product.brand)}`} className="hover:text-link-hover hover:underline">{product.brand}</Link></li>
+              <li><Link href={`/s?cat=${product.category.slug}&sub=${product.subcategory.slug}`} className="hover:text-link-hover hover:underline">{product.subcategory.name}</Link></li>
             </>
           )}
         </ol>

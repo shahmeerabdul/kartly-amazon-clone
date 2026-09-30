@@ -10,17 +10,18 @@ import { DeliverTo } from "@/components/header/deliver-to";
 import { AccountMenu } from "@/components/header/account-menu";
 import { AllDrawer } from "@/components/header/all-drawer";
 import { Wordmark } from "@/components/header/wordmark";
+import { FEATURED_DEPARTMENT_COUNT } from "@/lib/taxonomy";
 
 const QUICK_LINKS = [
   { href: "/s?sort=discount", label: "Today's Deals" },
   { href: "/s?sort=rating", label: "Top Rated" },
   { href: "/s?sort=newest", label: "New Arrivals" },
-  { href: "/s?cat=cell-phones", label: "Cell Phones" },
+  { href: "/s?cat=electronics", label: "Electronics" },
   { href: "/s?cat=computers", label: "Computers" },
-  { href: "/s?cat=home", label: "Home" },
-  { href: "/s?cat=kitchen", label: "Kitchen" },
+  { href: "/s?cat=home-kitchen", label: "Home & Kitchen" },
   { href: "/s?cat=beauty", label: "Beauty" },
   { href: "/s?cat=grocery", label: "Grocery" },
+  { href: "/s?cat=pet-supplies", label: "Pet Supplies" },
 ];
 
 function UsFlag() {
@@ -62,7 +63,7 @@ export async function Header() {
         select: { id: true, fullName: true, line1: true, city: true, state: true, zip: true, isDefault: true },
       })
     : [];
-  const depts = categories.map((c) => ({ slug: c.slug, name: c.name }));
+  const depts = categories.map((c) => ({ slug: c.slug, name: c.name, subs: c.subcategories.map((sc) => ({ slug: sc.slug, name: sc.name })) }));
 
   return (
     <header className="text-white">
@@ -106,7 +107,7 @@ export async function Header() {
       <DeliverTo location={location} name={name} addresses={addresses} compact />
       <nav aria-label="Shortcuts" className="bg-subnav">
         <div className="flex h-[39px] items-center overflow-x-auto whitespace-nowrap px-2 text-sm">
-          <AllDrawer departments={depts} name={name} email={session?.user?.email ?? null} />
+          <AllDrawer departments={depts} featuredCount={FEATURED_DEPARTMENT_COUNT} name={name} email={session?.user?.email ?? null} />
           {QUICK_LINKS.map((l) => (
             <Link key={l.href} href={l.href} className="nav-item px-2 py-1.5">
               {l.label}

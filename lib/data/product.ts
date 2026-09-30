@@ -3,7 +3,7 @@ import { db } from "@/lib/db";
 import { productCardSelect } from "@/lib/data/catalog";
 
 export const getProductBySlug = cache((slug: string) =>
-  db.product.findUnique({ where: { slug }, include: { category: true } }),
+  db.product.findUnique({ where: { slug }, include: { category: true, subcategory: true } }),
 );
 
 export type ReviewSort = "top" | "recent";

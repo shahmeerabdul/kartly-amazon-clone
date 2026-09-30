@@ -4,6 +4,7 @@ import { join } from "node:path";
 import bcrypt from "bcryptjs";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient, type Prisma } from "../lib/generated/prisma/client";
+import { TAXONOMY, classify } from "../lib/taxonomy";
 
 config({ path: ".env.local", quiet: true });
 
@@ -34,33 +35,6 @@ type SourceProduct = {
   thumbnail: string;
 };
 
-// Source categories mapped to Amazon-style departments; small categories are merged.
-const DEPARTMENTS: Record<string, { slug: string; name: string }> = {
-  beauty: { slug: "beauty", name: "Beauty & Personal Care" },
-  "skin-care": { slug: "beauty", name: "Beauty & Personal Care" },
-  fragrances: { slug: "beauty", name: "Beauty & Personal Care" },
-  furniture: { slug: "home", name: "Home & Furniture" },
-  "home-decoration": { slug: "home", name: "Home & Furniture" },
-  groceries: { slug: "grocery", name: "Grocery & Gourmet Food" },
-  "kitchen-accessories": { slug: "kitchen", name: "Kitchen & Dining" },
-  laptops: { slug: "computers", name: "Computers & Tablets" },
-  tablets: { slug: "computers", name: "Computers & Tablets" },
-  smartphones: { slug: "cell-phones", name: "Cell Phones & Accessories" },
-  "mobile-accessories": { slug: "cell-phones", name: "Cell Phones & Accessories" },
-  "mens-shirts": { slug: "mens-fashion", name: "Men's Fashion" },
-  "mens-shoes": { slug: "mens-fashion", name: "Men's Fashion" },
-  "mens-watches": { slug: "mens-fashion", name: "Men's Fashion" },
-  tops: { slug: "womens-fashion", name: "Women's Fashion" },
-  "womens-dresses": { slug: "womens-fashion", name: "Women's Fashion" },
-  "womens-shoes": { slug: "womens-fashion", name: "Women's Fashion" },
-  "womens-bags": { slug: "womens-fashion", name: "Women's Fashion" },
-  "womens-jewellery": { slug: "womens-fashion", name: "Women's Fashion" },
-  "womens-watches": { slug: "womens-fashion", name: "Women's Fashion" },
-  sunglasses: { slug: "womens-fashion", name: "Women's Fashion" },
-  "sports-accessories": { slug: "sports", name: "Sports & Outdoors" },
-  motorcycle: { slug: "automotive", name: "Automotive" },
-  vehicle: { slug: "automotive", name: "Automotive" },
-};
 
 // Small deterministic PRNG so reseeds produce identical data.
 function rng(seed: number) {
@@ -130,18 +104,21 @@ async function main() {
   await db.address.deleteMany();
   await db.user.deleteMany();
   await db.product.deleteMany();
+  await db.subcategory.deleteMany();
   await db.category.deleteMany();
 
-  const categories = new Map<string, { id: string; name: string; imageUrl: string }>();
-  for (const p of products) {
-    const dep = DEPARTMENTS[p.category] ?? { slug: slugify(p.category), name: p.category };
-    if (!categories.has(dep.slug)) {
-      categories.set(dep.slug, { id: `cat_${dep.slug}`, name: dep.name, imageUrl: p.thumbnail });
-    }
-  }
+  // Every department and subcategory in the taxonomy must end up with products.
+  const placed = new Map(products.map((p) => [p.id, classify(p.category, p.tags)]));
+  const thumbFor = (dept: string) => products.find((p) => placed.get(p.id)![0] === dept)?.thumbnail ?? "";
   await db.category.createMany({
-    data: [...categories].map(([slug, c]) => ({ id: c.id, slug, name: c.name, imageUrl: c.imageUrl })),
+    data: TAXONOMY.map((d, i) => ({ id: `cat_${d.slug}`, slug: d.slug, name: d.name, imageUrl: thumbFor(d.slug), sortOrder: i })),
   });
+  await db.subcategory.createMany({
+    data: TAXONOMY.flatMap((d) => d.subs.map((s, i) => ({ id: `sub_${s.slug}`, slug: s.slug, name: s.name, sortOrder: i, categoryId: `cat_${d.slug}` }))),
+  });
+  for (const d of TAXONOMY) for (const sub of d.subs) {
+    if (![...placed.values()].some(([dp, sb]) => dp === d.slug && sb === sub.slug)) throw new Error(`Empty subcategory: ${d.slug}/${sub.slug}`);
+  }
 
   const usedSlugs = new Set<string>();
   const productRows: Prisma.ProductCreateManyInput[] = [];
@@ -150,7 +127,7 @@ async function main() {
 
   for (const p of products) {
     const r = rng(p.id * 7919);
-    const dep = DEPARTMENTS[p.category] ?? { slug: slugify(p.category) };
+    const [deptSlug, subSlug] = placed.get(p.id)!;
     let slug = slugify(p.title);
     if (usedSlugs.has(slug)) slug = `${slug}-${p.id}`;
     usedSlugs.add(slug);
@@ -182,7 +159,8 @@ async function main() {
         Warranty: p.warrantyInformation,
       },
       tags: p.tags,
-      categoryId: `cat_${dep.slug}`,
+      categoryId: `cat_${deptSlug}`,
+      subcategoryId: `sub_${subSlug}`,
       // Spread creation dates so "Newest arrivals" has a meaningful order.
       createdAt: new Date(now - Math.floor(r() * 180) * 86_400_000),
     });
@@ -216,7 +194,7 @@ async function main() {
 
   await db.product.createMany({ data: productRows });
   await db.review.createMany({ data: reviewRows });
-  console.log(`Seeded ${categories.size} departments, ${productRows.length} products, ${reviewRows.length} reviews`);
+  console.log(`Seeded ${TAXONOMY.length} departments, ${TAXONOMY.reduce((n, d) => n + d.subs.length, 0)} subcategories, ${productRows.length} products, ${reviewRows.length} reviews`);
 
   const password = process.env.DEMO_USER_PASSWORD;
   if (!password) throw new Error("DEMO_USER_PASSWORD is not set");
