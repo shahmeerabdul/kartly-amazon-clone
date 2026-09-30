@@ -32,7 +32,7 @@ export function AccountMenu({ name }: { name: string | null }) {
       onKeyDown={(e) => e.key === "Escape" && setOpen(false)}
     >
       <Link
-        href={name ? "/orders" : `/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`}
+        href={name ? "/account" : `/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`}
         aria-haspopup="true"
         aria-expanded={open}
         className="nav-item flex flex-col px-2 py-1 leading-tight"
@@ -53,7 +53,10 @@ export function AccountMenu({ name }: { name: string | null }) {
                   Signed in as <b>{name}</b>
                 </p>
                 <nav aria-label="Your account" className="space-y-2 text-sm">
+                  <Link href="/account" className="link block">Your Account</Link>
                   <Link href="/orders" className="link block">Your Orders</Link>
+                  <Link href="/account/security" className="link block">Login &amp; security</Link>
+                  <Link href="/account/addresses" className="link block">Your Addresses</Link>
                   <Link href="/cart" className="link block">Your Cart</Link>
                   <form action={signOutAction}>
                     <button className="link">Sign Out</button>

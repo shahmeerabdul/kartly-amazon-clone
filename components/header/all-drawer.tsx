@@ -4,10 +4,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Menu, UserCircle2, X } from "lucide-react";
+import { demoSignInAction, signOutAction } from "@/lib/actions/auth";
 
 type Dept = { slug: string; name: string };
 
-export function AllDrawer({ departments, name }: { departments: Dept[]; name: string | null }) {
+const ITEM = "block px-8 py-3 text-sm hover:bg-[#eaeded]";
+
+export function AllDrawer({ departments, name, email }: { departments: Dept[]; name: string | null; email: string | null }) {
   const [open, setOpen] = useState(false);
   const closeRef = useRef<HTMLButtonElement>(null);
   const pathname = usePathname();
@@ -43,7 +46,7 @@ export function AllDrawer({ departments, name }: { departments: Dept[]; name: st
           <div className="relative flex h-full w-[min(85vw,365px)] flex-col overflow-y-auto bg-white text-text shadow-xl">
             <div className="flex items-center gap-2 bg-subnav px-8 py-3 text-lg font-bold text-white">
               <UserCircle2 className="h-7 w-7" aria-hidden />
-              Hello, {name ? name.split(" ")[0] : <Link href="/signin" className="hover:underline">sign in</Link>}
+              Hello, {name ? <Link href="/account" className="hover:underline">{name.split(" ")[0]}</Link> : <Link href="/signin" className="hover:underline">sign in</Link>}
             </div>
             <nav className="py-2">
               <h2 className="px-8 py-2 text-lg font-bold">Shop by Department</h2>
@@ -57,11 +60,40 @@ export function AllDrawer({ departments, name }: { departments: Dept[]; name: st
                 ))}
               </ul>
               <hr className="my-2 border-border" />
-              <h2 className="px-8 py-2 text-lg font-bold">Help &amp; Settings</h2>
+              <h2 className="px-8 py-2 text-lg font-bold">Your Account</h2>
+              {name && email && (
+                <p className="px-8 pb-2 text-xs text-text-secondary">
+                  Signed in as <b className="text-text">{name}</b>
+                  <span className="block">{email}</span>
+                </p>
+              )}
               <ul>
-                <li><Link href="/orders" className="block px-8 py-3 text-sm hover:bg-[#eaeded]">Your Orders</Link></li>
-                <li><Link href="/cart" className="block px-8 py-3 text-sm hover:bg-[#eaeded]">Your Cart</Link></li>
-                {!name && <li><Link href="/signin" className="block px-8 py-3 text-sm hover:bg-[#eaeded]">Sign in</Link></li>}
+                {name ? (
+                  <>
+                    <li><Link href="/account" className={ITEM}>Your Account</Link></li>
+                    <li><Link href="/orders" className={ITEM}>Your Orders</Link></li>
+                    <li><Link href="/account/security" className={ITEM}>Login &amp; security</Link></li>
+                    <li><Link href="/account/addresses" className={ITEM}>Your Addresses</Link></li>
+                    <li><Link href="/cart" className={ITEM}>Your Cart</Link></li>
+                    <li>
+                      <form action={signOutAction}>
+                        <button className={`${ITEM} w-full text-left`}>Sign Out</button>
+                      </form>
+                    </li>
+                  </>
+                ) : (
+                  <>
+                    <li><Link href={`/signin?callbackUrl=${encodeURIComponent(pathname)}`} className={ITEM}>Sign in</Link></li>
+                    <li>
+                      <form action={demoSignInAction}>
+                        <input type="hidden" name="callbackUrl" value="/account" />
+                        <button className={`${ITEM} w-full text-left`}>Try the demo account</button>
+                      </form>
+                    </li>
+                    <li><Link href="/register" className={ITEM}>Create an account</Link></li>
+                    <li><Link href="/cart" className={ITEM}>Your Cart</Link></li>
+                  </>
+                )}
               </ul>
             </nav>
           </div>

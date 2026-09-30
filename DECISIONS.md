@@ -29,3 +29,5 @@
 - Mock payment: Luhn, expiry and CVC validated with one Zod schema on client and server; only the last 4 digits are stored, and the form is labeled "Demo checkout, no real payment".
 - Cancelling an order returns its stock inside a transaction, guarded on status so a double cancel is a no-op.
 - `migrate dev` refuses non-interactive shells, so later migrations are generated with `prisma migrate diff` and applied with `migrate deploy`.
+- Your Account (Tier 2, built on request): sidebar drawer section with name, email and account links; `/account` card grid; Login & security (name, password); address book with add, edit, remove and set default, always keeping exactly one default.
+- The demo account's password can't be changed, so the one-click demo login keeps working for every reviewer.

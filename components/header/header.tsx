@@ -57,7 +57,7 @@ export async function Header() {
       <DeliverTo zip={zip} name={name} compact />
       <nav aria-label="Departments" className="bg-subnav">
         <div className="mx-auto flex max-w-[1500px] items-center gap-1 overflow-x-auto whitespace-nowrap px-2 py-1 text-sm">
-          <AllDrawer departments={depts} name={name} />
+          <AllDrawer departments={depts} name={name} email={session?.user?.email ?? null} />
           {depts
             .filter((d) => QUICK_LINKS.includes(d.slug))
             .map((d) => (

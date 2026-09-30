@@ -37,7 +37,7 @@ Production URL: _pending_
 - [ ] Wish list
 - [ ] Write a review (Verified Purchase)
 - [ ] Recently viewed
-- [ ] Account + address book
+- [x] Account + address book (drawer section, /account, login & security, addresses)
 - [ ] Today's Deals
 
 ## Phase 7: Polish and QA

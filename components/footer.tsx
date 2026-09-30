@@ -11,6 +11,7 @@ export async function Footer() {
     {
       title: "Let Us Help You",
       links: [
+        { href: "/account", label: "Your Account" },
         { href: "/orders", label: "Your Orders" },
         { href: "/cart", label: "Your Cart" },
         { href: "/signin", label: "Sign in" },
