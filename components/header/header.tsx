@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { Suspense } from "react";
-import { ShoppingCart } from "lucide-react";
 import { auth } from "@/lib/auth";
 import { getCategories } from "@/lib/data/catalog";
 import { getCartCount } from "@/lib/data/cart";
@@ -11,24 +10,50 @@ import { AccountMenu } from "@/components/header/account-menu";
 import { AllDrawer } from "@/components/header/all-drawer";
 import { Wordmark } from "@/components/header/wordmark";
 
-const QUICK_LINKS = ["cell-phones", "computers", "home", "kitchen", "beauty"];
+const QUICK_LINKS = [
+  { href: "/s?sort=discount", label: "Today's Deals" },
+  { href: "/s?sort=rating", label: "Top Rated" },
+  { href: "/s?sort=newest", label: "New Arrivals" },
+  { href: "/s?cat=cell-phones", label: "Cell Phones" },
+  { href: "/s?cat=computers", label: "Computers" },
+  { href: "/s?cat=home", label: "Home" },
+  { href: "/s?cat=kitchen", label: "Kitchen" },
+  { href: "/s?cat=beauty", label: "Beauty" },
+  { href: "/s?cat=grocery", label: "Grocery" },
+];
+
+function UsFlag() {
+  return (
+    <svg viewBox="0 0 19 10" width="21" height="14" aria-hidden className="shrink-0 rounded-[1px]">
+      <rect width="19" height="10" fill="#b22234" />
+      {[1, 3, 5, 7, 9].map((y) => (
+        <rect key={y} y={(y * 10) / 13} width="19" height={10 / 13} fill="#fff" />
+      ))}
+      <rect y={(11 * 10) / 13} width="19" height={10 / 13} fill="#fff" />
+      <rect width="7.6" height={(7 * 10) / 13} fill="#3c3b6e" />
+    </svg>
+  );
+}
+
+function CartIcon({ count }: { count: number }) {
+  return (
+    <span className="relative block h-[38px] w-[40px]" aria-hidden>
+      <svg viewBox="0 0 40 38" width="40" height="38" className="absolute inset-0">
+        <path d="M2 7h6l5 18h19l4-13H11" fill="none" stroke="currentColor" strokeWidth="3" strokeLinejoin="round" strokeLinecap="round" />
+        <circle cx="15" cy="31" r="2.6" fill="currentColor" />
+        <circle cx="29" cy="31" r="2.6" fill="currentColor" />
+      </svg>
+      <span className="absolute left-[21px] top-[-2px] -translate-x-1/2 text-base font-bold leading-none text-accent">
+        {count > 99 ? "99+" : count}
+      </span>
+    </span>
+  );
+}
 
 export async function Header() {
   const [session, categories, count, zip] = await Promise.all([auth(), getCategories(), getCartCount(), getZip()]);
   const name = session?.user?.name ?? null;
   const depts = categories.map((c) => ({ slug: c.slug, name: c.name }));
-
-  const cart = (
-    <Link href="/cart" className="nav-item flex items-end px-2 py-1" aria-label={`Cart, ${count} ${count === 1 ? "item" : "items"}`}>
-      <span className="relative">
-        <ShoppingCart className="h-8 w-8" aria-hidden />
-        <span className="absolute -top-1 left-1/2 -translate-x-[35%] text-base font-bold text-accent" aria-hidden>
-          {count > 99 ? "99+" : count}
-        </span>
-      </span>
-      <span className="hidden text-sm font-bold sm:inline">Cart</span>
-    </Link>
-  );
 
   return (
     <header className="text-white">
@@ -36,35 +61,48 @@ export async function Header() {
         Skip to main content
       </a>
       <div className="bg-header">
-        <div className="mx-auto flex max-w-[1500px] flex-wrap items-center gap-1 px-2 py-1.5 md:flex-nowrap md:gap-2">
+        <div className="flex flex-wrap items-center gap-x-1 px-2 py-1 md:h-[60px] md:flex-nowrap md:py-0">
           <Wordmark />
           <DeliverTo zip={zip} name={name} />
-          <div className="order-last w-full py-1 md:order-none md:flex-1 md:py-0">
+          <div className="order-last w-full pb-2 md:order-none md:mx-2 md:w-auto md:flex-1 md:pb-0">
             <Suspense fallback={<div className="h-10 w-full rounded-md bg-white" />}>
               <SearchBar categories={depts} />
             </Suspense>
           </div>
           <div className="ml-auto flex items-center md:ml-0">
+            <span
+              className="nav-item hidden h-[50px] items-center gap-1 px-2 text-sm font-bold lg:flex"
+              title="Kartly is available in English (US), prices in USD"
+            >
+              <UsFlag />
+              EN
+              <span className="sr-only">: English, United States</span>
+            </span>
             <AccountMenu name={name} />
-            <Link href="/orders" className="nav-item hidden flex-col px-2 py-1 leading-tight md:flex">
+            <Link href="/orders" className="nav-item hidden h-[50px] flex-col justify-center px-2 leading-tight md:flex">
               <span className="text-xs">Returns</span>
               <span className="text-sm font-bold">&amp; Orders</span>
             </Link>
-            {cart}
+            <Link
+              href="/cart"
+              className="nav-item flex h-[50px] items-end px-2 pb-1.5"
+              aria-label={`Cart, ${count} ${count === 1 ? "item" : "items"}`}
+            >
+              <CartIcon count={count} />
+              <span className="hidden pb-0.5 text-sm font-bold sm:inline">Cart</span>
+            </Link>
           </div>
         </div>
       </div>
       <DeliverTo zip={zip} name={name} compact />
-      <nav aria-label="Departments" className="bg-subnav">
-        <div className="mx-auto flex max-w-[1500px] items-center gap-1 overflow-x-auto whitespace-nowrap px-2 py-1 text-sm">
+      <nav aria-label="Shortcuts" className="bg-subnav">
+        <div className="flex h-[39px] items-center overflow-x-auto whitespace-nowrap px-2 text-sm">
           <AllDrawer departments={depts} name={name} email={session?.user?.email ?? null} />
-          {depts
-            .filter((d) => QUICK_LINKS.includes(d.slug))
-            .map((d) => (
-              <Link key={d.slug} href={`/s?cat=${d.slug}`} className="nav-item px-2 py-1">
-                {d.name}
-              </Link>
-            ))}
+          {QUICK_LINKS.map((l) => (
+            <Link key={l.href} href={l.href} className="nav-item px-2 py-1.5">
+              {l.label}
+            </Link>
+          ))}
         </div>
       </nav>
     </header>

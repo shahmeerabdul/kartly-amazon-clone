@@ -35,13 +35,13 @@ export function AccountMenu({ name }: { name: string | null }) {
         href={name ? "/account" : `/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`}
         aria-haspopup="true"
         aria-expanded={open}
-        className="nav-item flex flex-col px-2 py-1 leading-tight"
+        className="nav-item flex h-[50px] flex-col justify-center px-2 leading-tight"
       >
         <span className="text-xs">Hello, {name ? name.split(" ")[0] : "sign in"}</span>
         <span className="flex items-center text-sm font-bold">
           <span className="hidden sm:inline">Account &amp; Lists</span>
           <span className="sm:hidden">Account</span>
-          <ChevronDown className="h-3 w-3" aria-hidden />
+          <ChevronDown className="ml-0.5 h-3 w-3 text-[#a7acb2]" strokeWidth={3} aria-hidden />
         </span>
       </Link>
       {open && (

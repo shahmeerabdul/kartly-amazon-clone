@@ -36,8 +36,8 @@ export function AllDrawer({ departments, name, email }: { departments: Dept[]; n
 
   return (
     <>
-      <button type="button" onClick={() => setOpen(true)} className="nav-item flex items-center gap-1 px-2 py-1 font-bold">
-        <Menu className="h-5 w-5" aria-hidden />
+      <button type="button" onClick={() => setOpen(true)} className="nav-item flex items-center gap-1 py-1.5 pl-1 pr-2 font-bold">
+        <Menu className="h-6 w-6" strokeWidth={2.5} aria-hidden />
         All
       </button>
       {open && (

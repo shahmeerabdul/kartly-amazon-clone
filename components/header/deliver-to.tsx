@@ -21,10 +21,10 @@ export function DeliverTo({ zip, name, compact = false }: { zip: string | null; 
         className={
           compact
             ? "flex w-full items-center gap-1 bg-footer-top px-3 py-2 text-sm text-white md:hidden"
-            : "hidden items-end gap-0.5 rounded-sm border border-transparent px-2 py-1 text-left hover:border-white lg:flex"
+            : "nav-item hidden h-[50px] shrink-0 items-end gap-0.5 px-2 pb-1.5 text-left md:flex"
         }
       >
-        <MapPin className="h-4 w-4 shrink-0" aria-hidden />
+        <MapPin className={compact ? "h-4 w-4 shrink-0" : "mb-0.5 h-[18px] w-[18px] shrink-0"} aria-hidden />
         {compact ? (
           <span>
             {label} {zip ?? "· set your location"}
@@ -32,7 +32,7 @@ export function DeliverTo({ zip, name, compact = false }: { zip: string | null; 
         ) : (
           <span className="leading-tight">
             <span className="block text-xs text-[#ccc]">{label}</span>
-            <span className="block text-sm font-bold">{zip ? `ZIP ${zip}` : "Update location"}</span>
+            <span className="block text-sm font-bold">{zip ? `${zip}, United States` : "United States"}</span>
           </span>
         )}
       </button>

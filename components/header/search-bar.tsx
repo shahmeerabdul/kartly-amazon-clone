@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
-import { Search } from "lucide-react";
+import { ChevronDown, Search } from "lucide-react";
 import { formatMoney } from "@/lib/format";
 
 type Suggestion = { id: string; slug: string; title: string; thumbnail: string; priceCents: number };
@@ -48,6 +48,7 @@ export function SearchBar({ categories }: { categories: { slug: string; name: st
     return () => document.removeEventListener("mousedown", onClick);
   }, []);
 
+  const catLabel = categories.find((c) => c.slug === cat)?.name ?? "All";
   const shown = q.trim().length >= 2 ? results : [];
   const rows = shown.length ? shown.length + 1 : 0; // last row is "See all results"
 
@@ -91,24 +92,28 @@ export function SearchBar({ categories }: { categories: { slug: string; name: st
         e.preventDefault();
         submit();
       }}
-      className="relative flex h-10 w-full rounded-md focus-within:ring-[3px] focus-within:ring-accent"
+      className="relative flex h-10 w-full rounded-md bg-white focus-within:ring-[3px] focus-within:ring-accent"
     >
       <label htmlFor="search-cat" className="sr-only">
         Search in department
       </label>
-      <select
-        id="search-cat"
-        value={cat}
-        onChange={(e) => setCat(e.target.value)}
-        className="hidden max-w-40 cursor-pointer rounded-l-md border-r border-border bg-[#e6e6e6] px-2 text-xs text-text-secondary hover:bg-[#d4d4d4] sm:block"
-      >
-        <option value="">All</option>
-        {categories.map((c) => (
-          <option key={c.slug} value={c.slug}>
-            {c.name}
-          </option>
-        ))}
-      </select>
+      {/* Like Amazon, the department picker shrinks to fit the selected label. */}
+      <div className="relative hidden shrink-0 sm:block" style={{ width: `${Math.min(catLabel.length, 22) * 7 + 38}px` }}>
+        <select
+          id="search-cat"
+          value={cat}
+          onChange={(e) => setCat(e.target.value)}
+          className="h-full w-full cursor-pointer appearance-none truncate rounded-l-md border-r border-[#cdcdcd] bg-[#e6e6e6] pl-3 pr-6 text-xs text-[#555] hover:bg-[#dadada] hover:text-text"
+        >
+          <option value="">All</option>
+          {categories.map((c) => (
+            <option key={c.slug} value={c.slug}>
+              {c.name}
+            </option>
+          ))}
+        </select>
+        <ChevronDown className="pointer-events-none absolute right-2 top-1/2 h-3 w-3 -translate-y-1/2 text-[#555]" aria-hidden />
+      </div>
       <label htmlFor="search-input" className="sr-only">
         Search Kartly
       </label>
@@ -129,14 +134,14 @@ export function SearchBar({ categories }: { categories: { slug: string; name: st
         aria-controls={listId}
         aria-autocomplete="list"
         aria-activedescendant={active >= 0 ? `${listId}-${active}` : undefined}
-        className="min-w-0 flex-1 rounded-l-md bg-white px-3 text-[15px] text-text outline-none sm:rounded-none"
+        className="min-w-0 flex-1 rounded-l-md bg-white px-2.5 text-[15px] text-text outline-none placeholder:text-[#6f7373] sm:rounded-none"
       />
       <button
         type="submit"
         aria-label="Search"
-        className="flex w-12 items-center justify-center rounded-r-md bg-search-btn hover:bg-[#f3a847]"
+        className="flex w-[45px] shrink-0 items-center justify-center rounded-r-md bg-search-btn hover:bg-[#f3a847]"
       >
-        <Search className="h-5 w-5 text-text" aria-hidden />
+        <Search className="h-[22px] w-[22px] text-[#333]" strokeWidth={2.5} aria-hidden />
       </button>
       {open && rows > 0 && (
         <ul

@@ -31,3 +31,4 @@
 - `migrate dev` refuses non-interactive shells, so later migrations are generated with `prisma migrate diff` and applied with `migrate deploy`.
 - Your Account (Tier 2, built on request): sidebar drawer section with name, email and account links; `/account` card grid; Login & security (name, password); address book with add, edit, remove and set default, always keeping exactly one default.
 - The demo account's password can't be changed, so the one-click demo login keeps working for every reviewer.
+- Header matches Amazon's layout: 60px bar with 50px hover-outlined items, a department picker that shrinks to its label, and an orange count on the cart. The wordmark and cart icon are our own, not Amazon assets. Sub-nav links only to real pages (deals, top rated, new arrivals, departments); EN is a static indicator because the store is English/USD only.
