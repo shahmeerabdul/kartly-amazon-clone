@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { cookies } from "next/headers";
-import { HeroCarousel } from "@/components/home/hero-carousel";
+import { HeroTiles } from "@/components/home/hero-tiles";
 import { ProductRow } from "@/components/product/product-row";
 import { getCategoryCards, getProductsByIds, getTodaysDeals, getTopRated } from "@/lib/data/catalog";
 
@@ -17,9 +17,9 @@ export default async function Home() {
 
   return (
     <div className="bg-page-bg pb-8">
-      <div className="mx-auto max-w-[1500px]">
-        <HeroCarousel />
-        <div className="relative z-10 -mt-24 grid grid-cols-1 gap-5 px-5 sm:-mt-32 sm:grid-cols-2 lg:-mt-52 lg:grid-cols-4">
+      <HeroTiles />
+      <div className="w-full">
+        <div className="mt-5 grid grid-cols-1 gap-5 px-5 sm:grid-cols-2 lg:grid-cols-4">
           {cards.slice(0, 8).map((c) => (
             <section key={c.id} className="flex flex-col bg-white p-5">
               <h2 className="mb-3 text-xl font-bold">{c.name}</h2>
