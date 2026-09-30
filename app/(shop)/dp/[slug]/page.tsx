@@ -10,7 +10,8 @@ import { Stars } from "@/components/ui/stars";
 import { Price, ListPrice } from "@/components/ui/price";
 import { getAlsoViewed, getProductBySlug, getReviews, type ReviewSort } from "@/lib/data/product";
 import { getProductsByIds } from "@/lib/data/catalog";
-import { getZip } from "@/lib/data/prefs";
+import { getLocation } from "@/lib/data/prefs";
+import { locationLabel } from "@/lib/locations";
 import { cookies } from "next/headers";
 import { deliveryDate, EXPRESS_FEE_CENTS, FREE_SHIPPING_THRESHOLD_CENTS, STANDARD_FEE_CENTS } from "@/lib/delivery";
 import { cn, discountPercent, formatCount, formatDate, formatMoney } from "@/lib/format";
@@ -32,10 +33,10 @@ export default async function ProductPage({ params, searchParams }: PageProps<"/
   const sort: ReviewSort = sp.rsort === "recent" ? "recent" : "top";
   const recentIds = ((await cookies()).get("recent")?.value ?? "").split(".").filter((id) => id && id !== product.id);
 
-  const [reviewData, alsoViewed, zip, recent] = await Promise.all([
+  const [reviewData, alsoViewed, location, recent] = await Promise.all([
     getReviews(product.id, { stars, sort }),
     getAlsoViewed(product.categoryId, product.id),
-    getZip(),
+    getLocation(),
     getProductsByIds(recentIds.slice(0, 10)),
   ]);
 
@@ -108,7 +109,8 @@ export default async function ProductPage({ params, searchParams }: PageProps<"/
             productId={product.id}
             priceCents={product.priceCents}
             stock={product.stock}
-            zip={zip}
+            locationLabel={location.city || location.zip ? locationLabel(location) : null}
+            international={location.country !== "US"}
             standardDate={formatDate(deliveryDate("standard"), { weekday: "long", month: "long", day: "numeric" })}
             expressDate={formatDate(deliveryDate("express"), { weekday: "long", month: "long", day: "numeric" })}
             standardFeeCents={STANDARD_FEE_CENTS}

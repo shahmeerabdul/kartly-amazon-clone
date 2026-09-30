@@ -11,7 +11,8 @@ type Props = {
   productId: string;
   priceCents: number;
   stock: number;
-  zip: string | null;
+  locationLabel: string | null;
+  international: boolean;
   standardDate: string;
   expressDate: string;
   standardFeeCents: number;
@@ -55,8 +56,13 @@ export function BuyBox(p: Props) {
       )}
       <p className="flex items-center gap-1 text-xs text-link">
         <MapPin className="h-3.5 w-3.5" aria-hidden />
-        {p.zip ? `Delivering to ZIP ${p.zip}` : "Set your location in the header for exact dates"}
+        {p.locationLabel ? `Deliver to ${p.locationLabel}` : "Set your location in the header for exact dates"}
       </p>
+      {p.international && inStock && (
+        <p className="rounded-md bg-[#fff8e6] px-2 py-1.5 text-xs text-text">
+          Dates above are for US delivery. International orders usually arrive in 7–14 business days; checkout currently ships to US addresses.
+        </p>
+      )}
       <p className={inStock ? (p.stock <= 5 ? "text-lg text-deal" : "text-lg text-in-stock") : "text-lg text-deal"}>
         {!inStock ? "Currently unavailable." : p.stock <= 5 ? `Only ${p.stock} left in stock - order soon.` : "In Stock"}
       </p>

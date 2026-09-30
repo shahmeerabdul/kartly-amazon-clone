@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import { auth } from "@/lib/auth";
 import { getCategories } from "@/lib/data/catalog";
 import { getCartCount } from "@/lib/data/cart";
-import { getZip } from "@/lib/data/prefs";
+import { getLocation } from "@/lib/data/prefs";
 import { SearchBar } from "@/components/header/search-bar";
 import { DeliverTo } from "@/components/header/deliver-to";
 import { AccountMenu } from "@/components/header/account-menu";
@@ -51,7 +51,7 @@ function CartIcon({ count }: { count: number }) {
 }
 
 export async function Header() {
-  const [session, categories, count, zip] = await Promise.all([auth(), getCategories(), getCartCount(), getZip()]);
+  const [session, categories, count, location] = await Promise.all([auth(), getCategories(), getCartCount(), getLocation()]);
   const name = session?.user?.name ?? null;
   const depts = categories.map((c) => ({ slug: c.slug, name: c.name }));
 
@@ -63,7 +63,7 @@ export async function Header() {
       <div className="bg-header">
         <div className="flex flex-wrap items-center gap-x-1 px-2 py-1 md:h-[60px] md:flex-nowrap md:py-0">
           <Wordmark />
-          <DeliverTo zip={zip} name={name} />
+          <DeliverTo location={location} name={name} />
           <div className="order-last w-full pb-2 md:order-none md:mx-2 md:w-auto md:flex-1 md:pb-0">
             <Suspense fallback={<div className="h-10 w-full rounded-md bg-white" />}>
               <SearchBar categories={depts} />
@@ -94,7 +94,7 @@ export async function Header() {
           </div>
         </div>
       </div>
-      <DeliverTo zip={zip} name={name} compact />
+      <DeliverTo location={location} name={name} compact />
       <nav aria-label="Shortcuts" className="bg-subnav">
         <div className="flex h-[39px] items-center overflow-x-auto whitespace-nowrap px-2 text-sm">
           <AllDrawer departments={depts} name={name} email={session?.user?.email ?? null} />

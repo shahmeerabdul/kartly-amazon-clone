@@ -23,7 +23,7 @@ test("signed-in user sees Your Account in the drawer and manages addresses", asy
   await page.getByRole("button", { name: "Add address" }).click();
   await page.getByLabel("Full name").fill("Test Person");
   await page.getByLabel("Street address").fill("1 Main St");
-  await page.getByLabel("City").fill("Austin");
+  await page.getByRole("textbox", { name: "City" }).fill("Austin");
   await page.getByLabel("State").fill("tx");
   await page.getByLabel("ZIP code", { exact: true }).fill("73301");
   await page.getByLabel("Phone number").fill("512-555-0100");
