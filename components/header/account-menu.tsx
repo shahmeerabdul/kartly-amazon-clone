@@ -55,6 +55,7 @@ export function AccountMenu({ name }: { name: string | null }) {
                 <nav aria-label="Your account" className="space-y-2 text-sm">
                   <Link href="/account" className="link block">Your Account</Link>
                   <Link href="/orders" className="link block">Your Orders</Link>
+                  <Link href="/wishlist" className="link block">Your Wish List</Link>
                   <Link href="/account/security" className="link block">Login &amp; security</Link>
                   <Link href="/account/addresses" className="link block">Your Addresses</Link>
                   <Link href="/cart" className="link block">Your Cart</Link>

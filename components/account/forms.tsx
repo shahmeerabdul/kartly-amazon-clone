@@ -23,11 +23,17 @@ function Message({ state }: { state: FormState }) {
   );
 }
 
+// React resets a form after its action runs; echoing the submitted values back keeps what was typed on error.
+type Echo = FormState & { values?: Record<string, string> };
+const withValues =
+  (fn: (prev: FormState, fd: FormData) => Promise<FormState>) =>
+  async (prev: Echo, fd: FormData): Promise<Echo> => ({ ...(await fn(prev, fd)), values: Object.fromEntries(fd) as Record<string, string> });
+
 export function NameForm({ name }: { name: string }) {
-  const [state, action, pending] = useActionState(updateName, {} as FormState);
+  const [state, action, pending] = useActionState(withValues(updateName), {} as Echo);
   return (
     <form action={action} className="space-y-3" noValidate>
-      <Field id="name" name="name" label="Name" defaultValue={name} autoComplete="name" error={state.fieldErrors?.name} />
+      <Field id="name" name="name" label="Name" defaultValue={state.values?.name ?? name} autoComplete="name" error={state.fieldErrors?.name} />
       <Message state={state} />
       <button disabled={pending} className="btn-cart">{pending ? "Saving…" : "Save changes"}</button>
     </form>
@@ -54,7 +60,8 @@ export function PasswordForm() {
 type Address = { id: string; fullName: string; line1: string; line2: string | null; city: string; state: string; zip: string; phone: string; isDefault: boolean };
 
 export function AddressForm({ address, onDone }: { address?: Address; onDone: () => void }) {
-  const [state, action, pending] = useActionState(saveAddress, {} as FormState);
+  const [state, action, pending] = useActionState(withValues(saveAddress), {} as Echo);
+  const v = (k: keyof Address) => state.values?.[k] ?? (address?.[k] as string | null | undefined) ?? "";
   const e = state.fieldErrors ?? {};
   const p = address?.id ?? "new";
   useEffect(() => {
@@ -67,13 +74,13 @@ export function AddressForm({ address, onDone }: { address?: Address; onDone: ()
     <form action={action} className="card grid gap-3 p-4 sm:grid-cols-2" noValidate>
       <h2 className="text-lg font-bold sm:col-span-2">{address ? "Edit address" : "Add a new address"}</h2>
       {address && <input type="hidden" name="id" value={address.id} />}
-      <div className="sm:col-span-2"><Field id={`${p}-fullName`} name="fullName" label="Full name" defaultValue={address?.fullName} autoComplete="name" error={e.fullName} /></div>
-      <div className="sm:col-span-2"><Field id={`${p}-line1`} name="line1" label="Street address" defaultValue={address?.line1} autoComplete="address-line1" error={e.line1} /></div>
-      <div className="sm:col-span-2"><Field id={`${p}-line2`} name="line2" label="Apt, suite, unit (optional)" defaultValue={address?.line2 ?? ""} autoComplete="address-line2" error={e.line2} /></div>
-      <Field id={`${p}-city`} name="city" label="City" defaultValue={address?.city} autoComplete="address-level2" error={e.city} />
-      <Field id={`${p}-state`} name="state" label="State" maxLength={2} placeholder="WA" defaultValue={address?.state} autoComplete="address-level1" error={e.state} />
-      <Field id={`${p}-zip`} name="zip" label="ZIP code" inputMode="numeric" defaultValue={address?.zip} autoComplete="postal-code" error={e.zip} />
-      <Field id={`${p}-phone`} name="phone" label="Phone number" type="tel" defaultValue={address?.phone} autoComplete="tel" error={e.phone} />
+      <div className="sm:col-span-2"><Field id={`${p}-fullName`} name="fullName" label="Full name" defaultValue={v("fullName")} autoComplete="name" error={e.fullName} /></div>
+      <div className="sm:col-span-2"><Field id={`${p}-line1`} name="line1" label="Street address" defaultValue={v("line1")} autoComplete="address-line1" error={e.line1} /></div>
+      <div className="sm:col-span-2"><Field id={`${p}-line2`} name="line2" label="Apt, suite, unit (optional)" defaultValue={v("line2")} autoComplete="address-line2" error={e.line2} /></div>
+      <Field id={`${p}-city`} name="city" label="City" defaultValue={v("city")} autoComplete="address-level2" error={e.city} />
+      <Field id={`${p}-state`} name="state" label="State" maxLength={2} placeholder="WA" defaultValue={v("state")} autoComplete="address-level1" error={e.state} />
+      <Field id={`${p}-zip`} name="zip" label="ZIP code" inputMode="numeric" defaultValue={v("zip")} autoComplete="postal-code" error={e.zip} />
+      <Field id={`${p}-phone`} name="phone" label="Phone number" type="tel" defaultValue={v("phone")} autoComplete="tel" error={e.phone} />
       {!address?.isDefault && (
         <label className="flex items-center gap-2 text-sm sm:col-span-2">
           <input type="checkbox" name="isDefault" className="accent-[#e77600]" /> Make this my default address

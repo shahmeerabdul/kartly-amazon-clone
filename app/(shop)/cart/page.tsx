@@ -24,7 +24,7 @@ export default async function CartPage() {
             <div className="py-6">
               <h1 id="cart-title" className="text-2xl font-bold">Your Kartly Cart is empty</h1>
               <p className="mt-2 text-sm">
-                <Link href="/s?sort=discount" className="link">Shop today&apos;s deals</Link>
+                <Link href="/deals" className="link">Shop today&apos;s deals</Link>
               </p>
               {!session && (
                 <div className="mt-4 flex flex-wrap gap-3">

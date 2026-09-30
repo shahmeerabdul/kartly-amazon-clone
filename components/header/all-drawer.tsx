@@ -95,7 +95,7 @@ export function AllDrawer({ departments, featuredCount, name, email }: Props) {
               <nav data-panel="main" aria-label="Main menu" aria-hidden={!!dept} className={cn("absolute inset-x-0 top-0 pb-6 transition-transform duration-300", dept ? "-translate-x-full" : "translate-x-0")} inert={!!dept}>
                 <h2 className={HEADING}>Trending</h2>
                 <ul>
-                  <li><Link href="/s?sort=discount" onClick={close} className={ROW}>Today&apos;s Deals</Link></li>
+                  <li><Link href="/deals" onClick={close} className={ROW}>Today&apos;s Deals</Link></li>
                   <li><Link href="/s?sort=rating" onClick={close} className={ROW}>Top Rated</Link></li>
                   <li><Link href="/s?sort=newest" onClick={close} className={ROW}>New Arrivals</Link></li>
                 </ul>
@@ -117,6 +117,7 @@ export function AllDrawer({ departments, featuredCount, name, email }: Props) {
                     <>
                       <li><Link href="/account" onClick={close} className={ROW}>Your Account</Link></li>
                       <li><Link href="/orders" onClick={close} className={ROW}>Your Orders</Link></li>
+                      <li><Link href="/wishlist" onClick={close} className={ROW}>Your Wish List</Link></li>
                       <li><Link href="/account/security" onClick={close} className={ROW}>Login &amp; security</Link></li>
                       <li><Link href="/account/addresses" onClick={close} className={ROW}>Your Addresses</Link></li>
                       <li><Link href="/cart" onClick={close} className={ROW}>Your Cart</Link></li>

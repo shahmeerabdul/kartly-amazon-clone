@@ -13,7 +13,7 @@ import { Wordmark } from "@/components/header/wordmark";
 import { FEATURED_DEPARTMENT_COUNT } from "@/lib/taxonomy";
 
 const QUICK_LINKS = [
-  { href: "/s?sort=discount", label: "Today's Deals" },
+  { href: "/deals", label: "Today's Deals" },
   { href: "/s?sort=rating", label: "Top Rated" },
   { href: "/s?sort=newest", label: "New Arrivals" },
   { href: "/s?cat=electronics", label: "Electronics" },

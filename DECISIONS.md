@@ -41,3 +41,7 @@
 - Drawer mirrors Amazon: Trending, then Shop by Department with a › per department that slides to a sub-panel ("Main menu" back, "All <Department>", subcategories). Esc steps back, then closes.
 - Search gains a `sub` filter with indented subcategory facets and a chip; old links (`cat=kitchen`, `cat=home`, `cat=cell-phones`) still resolve to the right department and subcategory.
 - Fixed star ratings rendering empty: shared SVG gradient ids broke when the first copy sat in the hidden mobile filter sheet; stars now clip a filled copy by width, with no ids.
+- Wish List: "Add to List" in the buy box (optimistic heart; guests are sent to sign-in), `/wishlist` grid with Move to cart and Remove.
+- Reviews: only buyers (a non-cancelled order containing the item) can review, one review each (editable), always shown as Verified Purchase. Saving adjusts the product average and count in one transaction. Delivered orders link to "Write a product review".
+- `/deals` page: in-stock discounted items sorted by biggest discount, department pills, "Limited time deal" label. Header, drawer and homepage "Today's Deals" now point here.
+- React 19 resets forms after a server action runs, which wiped what users typed when validation failed. Review fields are now controlled, and the address, name and register forms echo submitted values back (passwords excepted). Found by an e2e test.

@@ -4,12 +4,14 @@ import Link from "next/link";
 import { useState } from "react";
 import { Lock, MapPin } from "lucide-react";
 import { AddToCartButton } from "@/components/cart/add-to-cart-button";
+import { WishlistButton } from "@/components/product/wishlist-button";
 import { Price } from "@/components/ui/price";
 import { formatMoney } from "@/lib/format";
 
 type Props = {
   productId: string;
   priceCents: number;
+  saved: boolean;
   stock: number;
   locationLabel: string | null;
   international: boolean;
@@ -85,6 +87,8 @@ export function BuyBox(p: Props) {
           </p>
         </>
       )}
+      <hr className="border-border" />
+      <WishlistButton productId={p.productId} saved={p.saved} />
     </div>
   );
 }

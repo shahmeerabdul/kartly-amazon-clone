@@ -32,3 +32,12 @@ export const getAlsoViewed = (categoryId: string, excludeId: string) =>
     take: 12,
     select: productCardSelect,
   });
+
+// Buyers (any order that wasn't cancelled) may write one review per product, and edit it later.
+export async function getReviewEligibility(userId: string, productId: string) {
+  const [purchase, existing] = await Promise.all([
+    db.orderItem.findFirst({ where: { productId, order: { userId, status: "PLACED" } }, select: { id: true } }),
+    db.review.findFirst({ where: { productId, userId }, select: { id: true, rating: true, title: true, body: true } }),
+  ]);
+  return { purchased: !!purchase, existing };
+}

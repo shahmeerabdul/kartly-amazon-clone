@@ -44,7 +44,7 @@ export default async function OrdersPage({ searchParams }: PageProps<"/orders">)
           <p className="text-lg font-bold">No orders in the {PERIODS[period]}.</p>
           <div className="mt-4 flex justify-center gap-3">
             {period !== "all" && <Link href="/orders?period=all" className="btn-secondary">View all orders</Link>}
-            <Link href="/s?sort=discount" className="btn-cart">Shop today&apos;s deals</Link>
+            <Link href="/deals" className="btn-cart">Shop today&apos;s deals</Link>
           </div>
         </div>
       ) : (
@@ -92,6 +92,11 @@ export default async function OrdersPage({ searchParams }: PageProps<"/orders">)
                     <BuyAgainButton productIds={o.items.map((i) => i.productId)} />
                     <Link href={`/orders/${o.id}`} className="btn-secondary w-full text-sm">View order details</Link>
                     {canCancel(o) && <CancelOrderButton orderId={o.id} />}
+                    {status === "Delivered" && (
+                      <Link href={`/dp/${o.items[0].product.slug}#reviews`} className="btn-secondary w-full text-sm">
+                        Write a product review
+                      </Link>
+                    )}
                   </div>
                 </div>
               </li>

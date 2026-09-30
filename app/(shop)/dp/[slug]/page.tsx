@@ -5,12 +5,15 @@ import { CheckCircle2 } from "lucide-react";
 import { Gallery } from "@/components/product/gallery";
 import { BuyBox } from "@/components/product/buy-box";
 import { TrackView } from "@/components/product/track-view";
+import { ReviewForm } from "@/components/product/review-form";
 import { ProductRow } from "@/components/product/product-row";
 import { Stars } from "@/components/ui/stars";
 import { Price, ListPrice } from "@/components/ui/price";
-import { getAlsoViewed, getProductBySlug, getReviews, type ReviewSort } from "@/lib/data/product";
+import { getAlsoViewed, getProductBySlug, getReviewEligibility, getReviews, type ReviewSort } from "@/lib/data/product";
 import { getProductsByIds } from "@/lib/data/catalog";
 import { getLocation } from "@/lib/data/prefs";
+import { auth } from "@/lib/auth";
+import { db } from "@/lib/db";
 import { locationLabel } from "@/lib/locations";
 import { cookies } from "next/headers";
 import { deliveryDate, EXPRESS_FEE_CENTS, FREE_SHIPPING_THRESHOLD_CENTS, STANDARD_FEE_CENTS } from "@/lib/delivery";
@@ -33,11 +36,15 @@ export default async function ProductPage({ params, searchParams }: PageProps<"/
   const sort: ReviewSort = sp.rsort === "recent" ? "recent" : "top";
   const recentIds = ((await cookies()).get("recent")?.value ?? "").split(".").filter((id) => id && id !== product.id);
 
-  const [reviewData, alsoViewed, location, recent] = await Promise.all([
+  const session = await auth();
+  const userId = session?.user?.id;
+  const [reviewData, alsoViewed, location, recent, saved, review] = await Promise.all([
     getReviews(product.id, { stars, sort }),
     getAlsoViewed(product.categoryId, product.id),
     getLocation(),
     getProductsByIds(recentIds.slice(0, 10)),
+    userId ? db.wishlistItem.findUnique({ where: { userId_productId: { userId, productId: product.id } }, select: { productId: true } }) : null,
+    userId ? getReviewEligibility(userId, product.id) : null,
   ]);
 
   const off = discountPercent(product.priceCents, product.listPriceCents);
@@ -107,6 +114,7 @@ export default async function ProductPage({ params, searchParams }: PageProps<"/
         <div className="md:col-span-2 lg:col-span-1">
           <BuyBox
             productId={product.id}
+            saved={!!saved}
             priceCents={product.priceCents}
             stock={product.stock}
             locationLabel={location.city || location.zip ? locationLabel(location) : null}
@@ -170,6 +178,20 @@ export default async function ProductPage({ params, searchParams }: PageProps<"/
               </li>
             ))}
           </ul>
+          {review?.purchased ? (
+            <ReviewForm productId={product.id} existing={review.existing} />
+          ) : (
+            <div className="mt-6 border-t border-border pt-5 text-sm">
+              <h3 className="font-bold">Review this product</h3>
+              {userId ? (
+                <p className="text-text-secondary">Only customers who bought this item can review it.</p>
+              ) : (
+                <p className="text-text-secondary">
+                  <Link href={`/signin?callbackUrl=${encodeURIComponent(`/dp/${product.slug}`)}`} className="link">Sign in</Link> to review a product you&apos;ve bought.
+                </p>
+              )}
+            </div>
+          )}
         </div>
         <div>
           <div className="mb-4 flex flex-wrap items-center gap-3 text-sm">

@@ -18,7 +18,7 @@ export default async function Home() {
       <HeroTiles />
       <div className="mt-5 space-y-5 px-3 sm:px-5">
         <QuadCards row={0} />
-        <ProductRow title="Today's Deals" products={deals} href="/s?sort=discount" linkLabel="See all deals" />
+        <ProductRow title="Today's Deals" products={deals} href="/deals" linkLabel="See all deals" />
         <QuadCards row={1} />
         {recent.length > 0 && <ProductRow title="Your browsing history" products={recent} />}
         <ProductRow title="Top rated in Cell Phones" products={topPhones} href="/s?cat=electronics&sub=cell-phones&sort=rating" />

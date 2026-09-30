@@ -13,7 +13,11 @@ const FIELDS = [
 ] as const;
 
 export function RegisterForm({ callbackUrl }: { callbackUrl: string }) {
-  const [state, action, pending] = useActionState(registerAction, {} as AuthState);
+  // Echo name and email back so React's post-action form reset doesn't clear them on error.
+  const [state, action, pending] = useActionState(
+    async (prev: AuthState & { name?: string }, fd: FormData) => ({ ...(await registerAction(prev, fd)), name: String(fd.get("name") ?? ""), email: String(fd.get("email") ?? "") }),
+    {} as AuthState & { name?: string },
+  );
   return (
     <form action={action} className="space-y-3" noValidate>
       <input type="hidden" name="callbackUrl" value={callbackUrl} />
@@ -28,7 +32,7 @@ export function RegisterForm({ callbackUrl }: { callbackUrl: string }) {
               type={f.type}
               autoComplete={f.autoComplete}
               placeholder={"placeholder" in f ? f.placeholder : undefined}
-              defaultValue={f.name === "email" ? state.email : undefined}
+              defaultValue={f.name === "email" ? state.email : f.name === "name" ? state.name : undefined}
               aria-invalid={!!err}
               aria-describedby={err ? `${f.name}-error` : undefined}
               className="input w-full"

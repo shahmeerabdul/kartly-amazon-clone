@@ -34,15 +34,15 @@ Production URL: _pending_
 - [ ] Tag `v1-core-loop`
 
 ## Phase 6: Tier 2
-- [ ] Wish list
-- [ ] Write a review (Verified Purchase)
-- [ ] Recently viewed
+- [x] Wish list (Add to List, /wishlist, move to cart)
+- [x] Write a review (buyers only, Verified Purchase, updates average)
+- [x] Recently viewed
 - [x] Account + address book (drawer section, /account, login & security, addresses)
-- [ ] Today's Deals
+- [x] Today's Deals (/deals)
 
 ## Phase 7: Polish and QA
 - [ ] Mobile pass, loading/empty/error states, a11y pass
-- [ ] Playwright guest-to-order test
+- [x] Playwright guest-to-order test (11 e2e tests)
 
 ## Phase 8: Docs
 - [ ] README with screenshots

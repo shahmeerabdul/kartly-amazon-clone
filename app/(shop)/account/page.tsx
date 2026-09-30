@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { KeyRound, MapPin, Package, ShoppingCart, UserCircle2 } from "lucide-react";
+import { Heart, KeyRound, MapPin, Package, ShoppingCart, UserCircle2 } from "lucide-react";
 import { requireAccount } from "@/lib/data/account";
 import { signOutAction } from "@/lib/actions/auth";
 import { formatDate } from "@/lib/format";
@@ -15,6 +15,7 @@ export default async function AccountPage() {
     { href: "/orders", icon: Package, title: "Your Orders", body: `Track, cancel or buy things again. ${user._count.orders} ${user._count.orders === 1 ? "order" : "orders"} so far.` },
     { href: "/account/security", icon: KeyRound, title: "Login & security", body: "Edit your name and change your password." },
     { href: "/account/addresses", icon: MapPin, title: "Your Addresses", body: `Edit, remove or set a default address. ${user._count.addresses} saved.` },
+    { href: "/wishlist", icon: Heart, title: "Your Lists", body: "View and manage items saved to your Wish List." },
     { href: "/cart", icon: ShoppingCart, title: "Your Cart", body: "Review items in your cart and items saved for later." },
   ];
 
