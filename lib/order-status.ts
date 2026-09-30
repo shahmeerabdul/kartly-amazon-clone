@@ -13,3 +13,8 @@ export function displayStatus(order: { status: "PLACED" | "CANCELLED"; createdAt
 
 export const canCancel = (order: { status: "PLACED" | "CANCELLED"; createdAt: Date }) =>
   displayStatus(order) === "Placed";
+
+// The simulated delivery happens 3 hours after ordering, or on the estimated date if that is already past.
+export function deliveredAt(order: { createdAt: Date; estimatedDelivery: Date }, now = Date.now()) {
+  return order.estimatedDelivery.getTime() < now ? order.estimatedDelivery : new Date(order.createdAt.getTime() + 3 * HOUR);
+}

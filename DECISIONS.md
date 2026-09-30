@@ -23,3 +23,9 @@
 - Two-step sign-in (email, then password) like Amazon; "Try the demo account" signs in as the seeded user in one click, password read from env on the server only.
 - Cart quantity changes use `useOptimistic`, so the select updates instantly while the server action runs.
 - Out-of-stock or over-stock cart lines disable "Proceed to checkout" with a plain-language message.
+- Route groups: `(shop)` pages get the full header and footer; `(bare)` sign-in, register and checkout get Amazon's minimal header, keeping buyers focused.
+- Place order runs in one transaction: conditional stock decrement (`stock >= qty`) per line so concurrent buyers can't oversell, then order and item snapshots, then the purchased cart lines are removed. Prices are re-read from the database, never trusted from the client.
+- Double-submit safety: each checkout render gets a UUID `checkoutKey` (unique column); a repeat submit redirects to the existing order. The button also disables while pending. Verified: a Playwright double click creates one order.
+- Mock payment: Luhn, expiry and CVC validated with one Zod schema on client and server; only the last 4 digits are stored, and the form is labeled "Demo checkout, no real payment".
+- Cancelling an order returns its stock inside a transaction, guarded on status so a double cancel is a no-op.
+- `migrate dev` refuses non-interactive shells, so later migrations are generated with `prisma migrate diff` and applied with `migrate deploy`.

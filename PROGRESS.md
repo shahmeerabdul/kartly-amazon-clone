@@ -29,8 +29,8 @@ Production URL: _pending_
 - [x] Cart merge on sign-in (Playwright verified)
 
 ## Phase 5: Checkout and orders
-- [ ] Checkout (address, payment, review, place order transaction)
-- [ ] Orders list + detail, cancel, buy again
+- [x] Checkout (address, payment, review, place order transaction)
+- [x] Orders list + detail, cancel, buy again
 - [ ] Tag `v1-core-loop`
 
 ## Phase 6: Tier 2
