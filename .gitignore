@@ -52,3 +52,5 @@ next-env.d.ts
 
 # agent capture logs (kept local only)
 /.agent-logs/
+
+.vercel

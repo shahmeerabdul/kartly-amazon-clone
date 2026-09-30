@@ -1,17 +1,17 @@
 # Progress
 
-Production URL: _pending_
+Production URL: https://kartly-amazon-clone.vercel.app
 
 ## Phase 1: Scaffold and deploy
 - [x] Preflight (node, git, gh)
-- [ ] Preflight (vercel, neonctl logins)
+- [x] Preflight (vercel, neonctl logins)
 - [x] Next.js 16 + TypeScript strict + Tailwind 4
 - [x] Prisma schema + client, Auth.js wiring, proxy guard
 - [x] `.env.example` with placeholders
 - [x] Public GitHub repo
 - [x] Neon database + `.env.local`
-- [ ] Vercel project, env vars, git connect
-- [ ] First production deploy
+- [x] Vercel project, env vars, git connect
+- [x] First production deploy
 
 ## Phase 2: Data and shell
 - [x] Migration + idempotent seed (products, categories, reviews, demo user + orders)
@@ -31,7 +31,7 @@ Production URL: _pending_
 ## Phase 5: Checkout and orders
 - [x] Checkout (address, payment, review, place order transaction)
 - [x] Orders list + detail, cancel, buy again
-- [ ] Tag `v1-core-loop`
+- [x] Tag `v1-core-loop` (all 11 e2e tests pass on production)
 
 ## Phase 6: Tier 2
 - [x] Wish list (Add to List, /wishlist, move to cart)

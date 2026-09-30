@@ -1,0 +1,9 @@
+.env
+.env.*
+!.env.example
+.agent-logs
+node_modules
+.next
+test-results
+playwright-report
+lib/generated

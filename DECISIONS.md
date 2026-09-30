@@ -45,3 +45,4 @@
 - Reviews: only buyers (a non-cancelled order containing the item) can review, one review each (editable), always shown as Verified Purchase. Saving adjusts the product average and count in one transaction. Delivered orders link to "Write a product review".
 - `/deals` page: in-stock discounted items sorted by biggest discount, department pills, "Limited time deal" label. Header, drawer and homepage "Today's Deals" now point here.
 - React 19 resets forms after a server action runs, which wiped what users typed when validation failed. Review fields are now controlled, and the address, name and register forms echo submitted values back (passwords excepted). Found by an e2e test.
+- Deployed to Vercel (project env vars for production and preview set through stdin); public URL https://kartly-amazon-clone.vercel.app. All 11 Playwright tests pass against production; the database is reseeded afterwards to remove test data.
