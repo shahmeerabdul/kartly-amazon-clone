@@ -10,9 +10,9 @@ export function ProductCard({ product, children }: { product: ProductCardData; c
   const off = discountPercent(product.priceCents, product.listPriceCents);
   const free = product.priceCents >= FREE_SHIPPING_THRESHOLD_CENTS;
   return (
-    <article className="flex h-full flex-col rounded-lg border border-border bg-white p-3">
+    <article className="flex h-full flex-col rounded-xl border border-border bg-white p-3">
       <Link href={`/dp/${product.slug}`} className="group flex flex-1 flex-col">
-        <div className="relative mb-2 aspect-square w-full overflow-hidden rounded bg-[#f7f7f7]">
+        <div className="relative mb-2 aspect-square w-full overflow-hidden rounded-lg bg-[#f7f7f7]">
           <Image src={product.thumbnail} alt={product.title} fill sizes="(max-width: 640px) 50vw, 240px" className="object-contain p-2 mix-blend-multiply" />
         </div>
         <h3 className="line-clamp-2 text-[15px] leading-snug text-text group-hover:text-link-hover">{product.title}</h3>

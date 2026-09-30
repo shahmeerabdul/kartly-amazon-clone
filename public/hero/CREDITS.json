@@ -1,0 +1,58 @@
+{
+  "kitchen": {
+    "title": "Kitchen Teapot",
+    "creator": "Matt Bango",
+    "source": "stocksnap",
+    "license": "cc0",
+    "url": "https://stocksnap.io/photo/kitchen-teapot-ND9JSEK2QN"
+  },
+  "beauty": {
+    "title": "Makeup Brush",
+    "creator": "Freestocks.org",
+    "source": "stocksnap",
+    "license": "cc0",
+    "url": "https://stocksnap.io/photo/makeup-brush-EXKVSL1OHJ"
+  },
+  "fashion": {
+    "title": "Clothes Suits",
+    "creator": "Clark Street Mercantile",
+    "source": "stocksnap",
+    "license": "cc0",
+    "url": "https://stocksnap.io/photo/clothes-suits-XRVSDKCWZ7"
+  },
+  "home": {
+    "title": "Interior Design",
+    "creator": "Kristin Hardwick",
+    "source": "stocksnap",
+    "license": "cc0",
+    "url": "https://stocksnap.io/photo/interior-design-HIH67XC5G0"
+  },
+  "phone": {
+    "title": "Woman Smartphone",
+    "creator": "Icons8 team",
+    "source": "stocksnap",
+    "license": "cc0",
+    "url": "https://stocksnap.io/photo/woman-smartphone-MLEPUKHYUU"
+  },
+  "shoes": {
+    "title": "Shoes Sneakers",
+    "creator": "Patrycja Tomaszczyk",
+    "source": "stocksnap",
+    "license": "cc0",
+    "url": "https://stocksnap.io/photo/shoes-sneakers-3K5S13RPLL"
+  },
+  "laptop": {
+    "title": "Macbook Laptop",
+    "creator": "Lauren Mancke",
+    "source": "stocksnap",
+    "license": "cc0",
+    "url": "https://stocksnap.io/photo/macbook-laptop-F7OLW2SG0C"
+  },
+  "sports": {
+    "title": "Tennis Racket",
+    "creator": "Krzysztof%20Puszczy%u0144ski",
+    "source": "stocksnap",
+    "license": "cc0",
+    "url": "https://stocksnap.io/photo/tennis-racket-8ODE0WIMD9"
+  }
+}

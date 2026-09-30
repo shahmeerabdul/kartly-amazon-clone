@@ -21,12 +21,12 @@ export default async function Home() {
       <div className="w-full">
         <div className="mt-5 grid grid-cols-1 gap-5 px-5 sm:grid-cols-2 lg:grid-cols-4">
           {cards.slice(0, 8).map((c) => (
-            <section key={c.id} className="flex flex-col bg-white p-5">
+            <section key={c.id} className="flex flex-col rounded-2xl bg-white p-5 shadow-[0_1px_3px_rgba(15,17,17,0.12)]">
               <h2 className="mb-3 text-xl font-bold">{c.name}</h2>
               <div className="grid flex-1 grid-cols-2 gap-3">
                 {c.products.map((p) => (
                   <Link key={p.thumbnail} href={`/s?cat=${c.slug}`} className="group">
-                    <div className="relative aspect-square bg-[#f7f7f7]">
+                    <div className="relative aspect-square overflow-hidden rounded-xl bg-[#f7f7f7]">
                       <Image src={p.thumbnail} alt={p.title} fill sizes="(max-width: 640px) 45vw, 160px" className="object-contain p-1 mix-blend-multiply" />
                     </div>
                     <p className="mt-1 line-clamp-1 text-xs text-text group-hover:text-link-hover">{p.title}</p>

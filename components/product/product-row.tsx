@@ -12,7 +12,7 @@ export function ProductRow({ title, products, href, linkLabel = "See more" }: {
 }) {
   if (!products.length) return null;
   return (
-    <section className="bg-white p-5" aria-label={title}>
+    <section className="rounded-2xl bg-white p-5 shadow-[0_1px_3px_rgba(15,17,17,0.12)]" aria-label={title}>
       <div className="mb-3 flex items-baseline gap-4">
         <h2 className="text-xl font-bold">{title}</h2>
         {href && <Link href={href} className="text-sm text-link hover:text-link-hover hover:underline">{linkLabel}</Link>}
@@ -23,7 +23,7 @@ export function ProductRow({ title, products, href, linkLabel = "See more" }: {
           return (
             <li key={p.id} className="w-40 shrink-0 snap-start sm:w-48">
               <Link href={`/dp/${p.slug}`} className="group block">
-                <div className="relative aspect-square w-full overflow-hidden bg-[#f7f7f7]">
+                <div className="relative aspect-square w-full overflow-hidden rounded-xl bg-[#f7f7f7]">
                   <Image src={p.thumbnail} alt={p.title} fill sizes="200px" className="object-contain p-2 mix-blend-multiply" />
                 </div>
                 {off > 0 && (
