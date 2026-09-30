@@ -8,8 +8,8 @@ Production URL: _pending_
 - [x] Next.js 16 + TypeScript strict + Tailwind 4
 - [x] Prisma schema + client, Auth.js wiring, proxy guard
 - [x] `.env.example` with placeholders
-- [ ] Public GitHub repo
-- [ ] Neon database + `.env.local`
+- [x] Public GitHub repo
+- [x] Neon database + `.env.local`
 - [ ] Vercel project, env vars, git connect
 - [ ] First production deploy
 
