@@ -43,12 +43,4 @@ export const getProductsByIds = async (ids: string[]) => {
   return ids.map((id) => products.find((p) => p.id === id)).filter((p) => p !== undefined);
 };
 
-export async function getCategoryCards() {
-  const categories = await db.category.findMany({
-    orderBy: { name: "asc" },
-    include: { products: { take: 4, orderBy: { ratingCount: "desc" }, select: { thumbnail: true, title: true } } },
-  });
-  return categories;
-}
-
 export type ProductCardData = Awaited<ReturnType<typeof getTopRated>>[number];
