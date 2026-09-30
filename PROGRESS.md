@@ -14,9 +14,9 @@ Production URL: _pending_
 - [ ] First production deploy
 
 ## Phase 2: Data and shell
-- [ ] Migration + idempotent seed (products, categories, reviews, demo user + orders)
-- [ ] Header, sub-nav, "All" drawer, footer
-- [ ] Homepage: hero carousel, category cards, product rows
+- [x] Migration + idempotent seed (products, categories, reviews, demo user + orders)
+- [x] Header, sub-nav, "All" drawer, footer
+- [x] Homepage: hero carousel, category cards, product rows
 
 ## Phase 3: Discovery
 - [ ] Search page with filters, chips, sort, pagination

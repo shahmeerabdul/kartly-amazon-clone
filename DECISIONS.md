@@ -8,3 +8,8 @@
 - Seed data from DummyJSON (194 products) saved to `prisma/seed-data/products.json`: seeding never depends on the network.
 - Agent capture via Claude Code hooks (`.claude/hooks/capture.mjs` on UserPromptSubmit and Stop): every prompt, response and tool call is exported to `.agent-logs/` as markdown, with connection strings, tokens, secrets and personal emails redacted.
 - Neon project `kartly` in aws-us-east-1 (same region as Vercel's default iad1) for low latency; Neon MCP installed with OAuth at project level so no API key is stored in the repo.
+- 194 products grouped into 10 Amazon-style departments; categories under 5 products merged (e.g. tablets into Computers & Tablets, sunglasses into Women's Fashion).
+- Stable product ids (`p<sourceId>`) and seeded PRNG: reseeding keeps carts, links and ratings stable.
+- No shadcn/ui: native `<dialog>` plus a few hand-rolled components covered the modal, drawer and dropdown with fewer dependencies.
+- Cart count in the header is server-rendered; cart actions call `refresh()` so it updates without a page reload or client store.
+- Hero banners are in-house CSS gradients with text: no Amazon imagery or brand assets.
