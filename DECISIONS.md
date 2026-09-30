@@ -13,3 +13,9 @@
 - No shadcn/ui: native `<dialog>` plus a few hand-rolled components covered the modal, drawer and dropdown with fewer dependencies.
 - Cart count in the header is server-rendered; cart actions call `refresh()` so it updates without a page reload or client store.
 - Hero banners are in-house CSS gradients with text: no Amazon imagery or brand assets.
+- Search filters, sorts and pagination in memory over the matching set (catalog ~200 products): exact facet counts in one query; swap for SQL paging if the catalog grows.
+- Every multi-word query term must match (AND), so "red dress" narrows results rather than widening them.
+- Filters are plain links and a GET form: state lives in the URL, results are shareable, back/forward work, and no client JS is needed to filter.
+- Product page shows "Total with standard delivery" in the buy box: the full price before checkout (improvement over Amazon).
+- Recently viewed stored in an httpOnly cookie (last 10 ids) written by a server action after render; works for guests.
+- Unknown product slugs render a friendly not-found page; the HTTP status stays 200 because the page streams (Next 16 soft 404).

@@ -19,9 +19,9 @@ Production URL: _pending_
 - [x] Homepage: hero carousel, category cards, product rows
 
 ## Phase 3: Discovery
-- [ ] Search page with filters, chips, sort, pagination
-- [ ] Instant suggestions
-- [ ] Product page
+- [x] Search page with filters, chips, sort, pagination
+- [x] Instant suggestions
+- [x] Product page
 
 ## Phase 4: Cart and auth
 - [ ] Guest cart + cookie
