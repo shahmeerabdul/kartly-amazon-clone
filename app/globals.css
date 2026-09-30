@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+:root {
+  --header: #131921;
+  --subnav: #232f3e;
+  --footer-top: #37475a;
+  --accent: #ff9900;
+  --search-btn: #febd69;
+  --cart-btn: #ffd814;
+  --cart-btn-hover: #f7ca00;
+  --buy-btn: #ffa41c;
+  --buy-btn-hover: #fa8900;
+  --link: #007185;
+  --link-hover: #c7511f;
+  --deal: #cc0c39;
+  --in-stock: #007600;
+  --star: #ffa41c;
+  --page-bg: #eaeded;
+  --text: #0f1111;
+  --text-secondary: #565959;
+  --border: #d5d9d9;
+}
+
+@theme inline {
+  --color-header: var(--header);
+  --color-subnav: var(--subnav);
+  --color-footer-top: var(--footer-top);
+  --color-accent: var(--accent);
+  --color-search-btn: var(--search-btn);
+  --color-cart-btn: var(--cart-btn);
+  --color-cart-btn-hover: var(--cart-btn-hover);
+  --color-buy-btn: var(--buy-btn);
+  --color-buy-btn-hover: var(--buy-btn-hover);
+  --color-link: var(--link);
+  --color-link-hover: var(--link-hover);
+  --color-deal: var(--deal);
+  --color-in-stock: var(--in-stock);
+  --color-star: var(--star);
+  --color-page-bg: var(--page-bg);
+  --color-text: var(--text);
+  --color-text-secondary: var(--text-secondary);
+  --color-border: var(--border);
+  --font-sans: Arial, "Helvetica Neue", Helvetica, sans-serif;
+}
+
+html {
+  font-size: 14px;
+}
+
+body {
+  background: #fff;
+  color: var(--text);
+  font-family: var(--font-sans);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
